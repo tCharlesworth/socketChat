@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="./semantic/dist/semantic.min.css">
+  <title>Chat</title>
+</head>
+<body>
+  
+
+  <div>
+    
+    <!-- Navbar -->
+    <div class="ui sidebar vertical menu inverted visible">
+      <div class="item">
+        <h1>Chat App</h1>
+      </div>
+      <div class="item">
+        <div class="header">Users</div>
+        <div class="menu">
+            <a href="/">One</a>
+            <a href="/">Two</a>
+            <a href="/">Three</a>
+            <a href="/">Four</a>
+        </div>
+      </div>
+    </div>
+    <!-- Main Area -->
+    <div>
+      <h3 class="ui dividing header">Messages</h3>
+    </div>
+  </div>
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/js" src="./semantic/dist/semantic.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script> 
+    var socket = io();
+  </script>
+</body>
+</html>
