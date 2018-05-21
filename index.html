@@ -3,41 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="./libraries/semantic.min.css">
   <title>Chat</title>
+  <style>
+  </style>
 </head>
 <body>
   
 
   <div>
-    
-    <!-- Navbar -->
-    <div class="ui sidebar vertical menu inverted visible">
-      <div class="item">
-        <h1>Chat App</h1>
-      </div>
-      <div class="item">
-        <div class="header">Users</div>
-        <div class="menu">
-            <a href="/">One</a>
-            <a href="/">Two</a>
-            <a href="/">Three</a>
-            <a href="/">Four</a>
-        </div>
-      </div>
+    <h1>Chat App</h1>
+    <div>
+      <form id="newNameForm">
+        <h3>Your Name</h3>
+        <input type="text" id="nameInput" placeholder="Name" />
+        <button type="submit">Save</button>
+      </form>
     </div>
     <!-- Main Area -->
     <div>
-      <h3 class="ui dividing header">Messages</h3>
+      <h3>Messages</h3>
+      <ul id="messages">
+      </ul>
+    </div>
+    <div>
+      <form id="newMessageForm">
+        <input type="text" id="newMessageInput" />
+        <button type="submit">Send</button>
+      </form>
     </div>
   </div>
 
-
-  <script type="text/js" src="./libraries/jquery.min.js"></script>
-  <script type="text/js" src="./libraries/semantic.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script> 
-    var socket = io();
+    $(() => {
+      var socket = io();
+      var msgInput =  $('#newMessageInput');
+      var nameInput = $('#nameInput');
+      var messagesContainer = $('#messages');
+      
+      var name = '';
+      
+      $('#newMessageForm').submit((event) => {
+        event.preventDefault();
+
+        let msg = msgInput.val();
+        if (!name) {
+          ShowMessage({name: 'Client', msg: 'Set your name before joining the chat!'});
+        } else if (msg) {
+          socket.emit('newChatMessage', {name, msg});
+        }
+
+        msgInput.val('');
+        return false;
+      });
+
+      $('#newNameForm').submit((event) => {
+        event.preventDefault();
+        let newName = nameInput.val();
+        
+        socket.emit('newName', {name, newName});
+        
+        name = newName;
+        console.log("New name set", name);
+        return false;
+      });
+
+      // Received events
+      socket.on('chatMessage', (chat) => {
+        ShowMessage(chat);
+      });
+
+      function ShowMessage(chat) {
+          messagesContainer.append($('<li>').text(`${chat.name || 'Unknown'}: ${chat.msg}`));
+      }
+    });
   </script>
 </body>
 </html>
